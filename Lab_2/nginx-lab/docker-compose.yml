@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   nginx:
     image: nginx:alpine
@@ -15,6 +14,6 @@ services:
     image: php:8.2-fpm
     container_name: lab2_php
     volumes:
-      - ./www:/var/www/html
+      - ./www:/usr/share/nginx/html
     expose:
       - "9000"

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Заказ такси</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Заказ такси</h1>
+
+    <form id="taxiForm">
+        <input type="text" name="Имя" placeholder="Ваше имя" required>
+        <br><br>
+
+        <input type="number" name="Количество пассажиров" placeholder="Кол-во пассажиров" min="1" max="8" required>
+        <br><br>
+
+        <select name="Тариф" required>
+            <option value="Эконом">Эконом</option>
+            <option value="Комфорт">Комфорт</option>
+            <option value="Бизнес">Бизнес</option>
+            <option value="Минивэн">Минивэн</option>
+        </select>
+        <br><br>
+
+        <input type="checkbox" name="Багаж" value="Да"> Есть багаж
+        <br><br>
+
+        <input type="radio" name="Тип оплаты" value="Наличные" checked> Наличные
+        <input type="radio" name="Тип оплаты" value="Карта"> Карта
+        <input type="radio" name="Тип оплаты" value="Онлайн"> Онлайн
+        <br><br>
+
+        <button type="submit">Заказать такси</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("taxiForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            let output = "<h2>Ваш заказ такси:</h2>";
+
+            for (const [name, value] of formData.entries()) {
+                if (name === "Багаж" && value === "Да") {
+                    output += `<p><b>${name}:</b> ${value}</p>`;
+                } else if (name !== "Багаж") {
+                    output += `<p><b>${name}:</b> ${value}</p>`;
+                }
+            }
+
+            document.getElementById("result").innerHTML = output;
+        });
+    </script>
+
+</body>
+</html>

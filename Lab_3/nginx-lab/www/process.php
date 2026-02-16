@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-$name = isset($_POST['Имя']) ? $_POST['Имя'] : '';
-$passengers = isset($_POST['Количество пассажиров']) ? $_POST['Количество пассажиров'] : '';
+$username = isset($_POST['Имя']) ? $_POST['Имя'] : '';
+$passengers = isset($_POST['Количество_пассажиров']) ? $_POST['Количество_пассажиров'] : '';
 $tariff = isset($_POST['Тариф']) ? $_POST['Тариф'] : '';
 $luggage = isset($_POST['Багаж']) ? $_POST['Багаж'] : 'Нет';
-$payment = isset($_POST['Тип оплаты']) ? $_POST['Тип оплаты'] : '';
+$payment = isset($_POST['Тип_оплаты']) ? $_POST['Тип_оплаты'] : '';
 
 $errors = [];
-if (empty($name)) {
+if (empty($username)) {
     $errors[] = "Имя не может быть пустым";
 }
 if (empty($passengers) || $passengers < 1 || $passengers > 8) {
@@ -24,15 +24,13 @@ if (!empty($errors)) {
     exit();
 }
 
-$_SESSION['form_data'] = [
-    'name' => $name,
-    'passengers' => $passengers,
-    'tariff' => $tariff,
-    'luggage' => $luggage,
-    'payment' => $payment
-];
+$_SESSION['username'] = $username;
+$_SESSION['passengers'] = $passengers;
+$_SESSION['tariff'] = $tariff;
+$_SESSION['luggage'] = $luggage;
+$_SESSION['payment'] = $payment;
 
-$line = date('Y-m-d H:i:s') . ";" . $name . ";" . $passengers . ";" . $tariff . ";" . $luggage . ";" . $payment . "\n";
+$line = $username . ";" . $passengers . ";" . $tariff . ";" . $luggage . ";" . $payment . "\n";
 file_put_contents("data.txt", $line, FILE_APPEND);
 
 header("Location: index.php");

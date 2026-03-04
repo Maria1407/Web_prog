@@ -38,10 +38,12 @@ file_put_contents("data.txt", $line, FILE_APPEND);
 require_once 'ApiClient.php';
 $api = new ApiClient();
 
-$url = 'https://catfact.ninja/fact';
+$url = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=55.75&longitude=37.61&localityLanguage=ru';
 $apiData = $api->request($url);
 
 $_SESSION['api_data'] = $apiData;
+
+setcookie("last_submission", date('Y-m-d H:i:s'), time() + 3600, "/");
 
 header("Location: index.php");
 exit();

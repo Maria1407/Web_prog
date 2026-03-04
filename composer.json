@@ -1,0 +1,12 @@
+{
+    "name": "mtink/web_prog",
+    "require": {
+        "guzzlehttp/guzzle": "^7.10"
+    },
+    "authors": [
+        {
+            "name": "Maria1407",
+            "email": "132288994+Maria1407@users.noreply.github.com"
+        }
+    ]
+}

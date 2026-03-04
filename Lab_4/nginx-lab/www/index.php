@@ -39,12 +39,27 @@ session_start();
         <p>Вы еще не сделали ни одного заказа.</p>
     <?php endif; ?>
 
-
     <?php if (isset($_SESSION['api_data'])): ?>
-        <h2>Данные из API (курсы валют):</h2>
+        <h2>Данные из API:</h2>
         <pre>
             <?php print_r($_SESSION['api_data']); ?>
         </pre>
+    <?php endif; ?>
+
+    <?php
+    require_once 'UserInfo.php';
+    $info = UserInfo::getInfo();
+    ?>
+
+    <h2>Информация о пользователе:</h2>
+    <ul>
+        <li><b>IP-адрес:</b> <?= htmlspecialchars($info['ip']) ?></li>
+        <li><b>User Agent:</b> <?= htmlspecialchars($info['user_agent']) ?></li>
+        <li><b>Время запроса:</b> <?= htmlspecialchars($info['time']) ?></li>
+    </ul>
+
+    <?php if (isset($_COOKIE['last_submission'])): ?>
+        <p><b>Последняя отправка формы:</b> <?= $_COOKIE['last_submission'] ?></p>
     <?php endif; ?>
 
 </body>

@@ -16,5 +16,6 @@ services:
     container_name: lab2_php
     volumes:
       - ./www:/var/www/html
+      - ../../vendor:/var/www/vendor
     expose:
       - "9000"

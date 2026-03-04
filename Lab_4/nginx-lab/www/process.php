@@ -24,14 +24,24 @@ if (!empty($errors)) {
     exit();
 }
 
-$_SESSION['username'] = $username;
-$_SESSION['passengers'] = $passengers;
-$_SESSION['tariff'] = $tariff;
-$_SESSION['luggage'] = $luggage;
-$_SESSION['payment'] = $payment;
+$_SESSION['form_data'] = [
+    'name' => $username,
+    'passengers' => $passengers,
+    'tariff' => $tariff,
+    'luggage' => $luggage,
+    'payment' => $payment
+];
 
 $line = $username . ";" . $passengers . ";" . $tariff . ";" . $luggage . ";" . $payment . "\n";
 file_put_contents("data.txt", $line, FILE_APPEND);
+
+require_once 'ApiClient.php';
+$api = new ApiClient();
+
+$url = 'https://catfact.ninja/fact';
+$apiData = $api->request($url);
+
+$_SESSION['api_data'] = $apiData;
 
 header("Location: index.php");
 exit();

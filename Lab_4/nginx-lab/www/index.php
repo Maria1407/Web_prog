@@ -38,5 +38,14 @@ session_start();
     <?php else: ?>
         <p>Вы еще не сделали ни одного заказа.</p>
     <?php endif; ?>
+
+
+    <?php if (isset($_SESSION['api_data'])): ?>
+        <h2>Данные из API (курсы валют):</h2>
+        <pre>
+            <?php print_r($_SESSION['api_data']); ?>
+        </pre>
+    <?php endif; ?>
+
 </body>
 </html>

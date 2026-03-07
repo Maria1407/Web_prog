@@ -1,5 +1,10 @@
 <?php
 session_start();
+require_once 'db.php';
+require_once 'Order.php';
+
+$order = new Order($pdo);
+$all_orders = $order->getAll();
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,31 +40,24 @@ session_start();
             <li><b>Багаж:</b> <?= $_SESSION['form_data']['luggage'] ?></li>
             <li><b>Тип оплаты:</b> <?= $_SESSION['form_data']['payment'] ?></li>
         </ul>
+    <?php endif; ?>
+
+    <h2>Все заказы из базы данных:</h2>
+    <?php if (!empty($all_orders)): ?>
+        <ul>
+        <?php foreach ($all_orders as $row): ?>
+            <li>
+                <b><?= htmlspecialchars($row['name']) ?></b> -
+                <?= $row['passengers'] ?> пасс. -
+                <?= $row['tariff'] ?> -
+                Багаж: <?= $row['luggage'] ? 'Да' : 'Нет' ?> -
+                Оплата: <?= $row['payment'] ?> -
+                <small><?= $row['created_at'] ?></small>
+            </li>
+        <?php endforeach; ?>
+        </ul>
     <?php else: ?>
-        <p>Вы еще не сделали ни одного заказа.</p>
-    <?php endif; ?>
-
-    <?php if (isset($_SESSION['api_data'])): ?>
-        <h2>Данные из API:</h2>
-        <pre>
-            <?php print_r($_SESSION['api_data']); ?>
-        </pre>
-    <?php endif; ?>
-
-    <?php
-    require_once 'UserInfo.php';
-    $info = UserInfo::getInfo();
-    ?>
-
-    <h2>Информация о пользователе:</h2>
-    <ul>
-        <li><b>IP-адрес:</b> <?= htmlspecialchars($info['ip']) ?></li>
-        <li><b>User Agent:</b> <?= htmlspecialchars($info['user_agent']) ?></li>
-        <li><b>Время запроса:</b> <?= htmlspecialchars($info['time']) ?></li>
-    </ul>
-
-    <?php if (isset($_COOKIE['last_submission'])): ?>
-        <p><b>Последняя отправка формы:</b> <?= $_COOKIE['last_submission'] ?></p>
+        <p>В базе данных пока нет заказов.</p>
     <?php endif; ?>
 
 </body>

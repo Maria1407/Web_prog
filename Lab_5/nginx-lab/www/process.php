@@ -1,11 +1,14 @@
 <?php
 session_start();
 
+require_once 'db.php';
+require_once 'Order.php';
+
 $username = isset($_POST['Имя']) ? $_POST['Имя'] : '';
-$passengers = isset($_POST['Количество_пассажиров']) ? $_POST['Количество_пассажиров'] : '';
+$passengers = isset($_POST['Количество пассажиров']) ? $_POST['Количество пассажиров'] : '';
 $tariff = isset($_POST['Тариф']) ? $_POST['Тариф'] : '';
 $luggage = isset($_POST['Багаж']) ? $_POST['Багаж'] : 'Нет';
-$payment = isset($_POST['Тип_оплаты']) ? $_POST['Тип_оплаты'] : '';
+$payment = isset($_POST['Тип оплаты']) ? $_POST['Тип оплаты'] : '';
 
 $errors = [];
 if (empty($username)) {
@@ -24,6 +27,10 @@ if (!empty($errors)) {
     exit();
 }
 
+// Сохраняем в БД
+$order = new Order($pdo);
+$order->add($username, $passengers, $tariff, $luggage, $payment);
+
 $_SESSION['form_data'] = [
     'name' => $username,
     'passengers' => $passengers,
@@ -31,17 +38,6 @@ $_SESSION['form_data'] = [
     'luggage' => $luggage,
     'payment' => $payment
 ];
-
-$line = $username . ";" . $passengers . ";" . $tariff . ";" . $luggage . ";" . $payment . "\n";
-file_put_contents("data.txt", $line, FILE_APPEND);
-
-require_once 'ApiClient.php';
-$api = new ApiClient();
-
-$url = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=55.75&longitude=37.61&localityLanguage=ru';
-$apiData = $api->request($url);
-
-$_SESSION['api_data'] = $apiData;
 
 setcookie("last_submission", date('Y-m-d H:i:s'), time() + 3600, "/");
 

@@ -1,30 +1,59 @@
 <?php
-
 require 'vendor/autoload.php';
 
-use App\RedisExample;
 use App\ElasticExample;
-use App\ClickhouseExample;
 
-// Redis
-$redis = new RedisExample();
-$redis->setValue('fraemwork', 'predis');
-echo $redis->getValue('fraemwork');
+header('Content-Type: text/html; charset=utf-8');
+echo "<h1>Лабораторная №6: Вариант 16 (Соцсеть)</h1>";
+echo "<h2>Демонстрация работы Elasticsearch</h2>";
+echo "<hr>";
 
+try {
+    $elastic = new ElasticExample();
+    $indexName = 'social_posts';
 
-// Elasticsearch
-$elastic = new ElasticExample();
-echo $elastic->indexDocument('books', 1, ['title' => '1984', 'author' => 'Orwell']);
-echo $elastic->search('books', ['author' => 'Orwell']);
+    // 1. Создание индекса
+    echo "<h3>📂 1. Создание индекса</h3>";
+    try {
+        $elastic->createIndex($indexName);
+        echo "✅ Индекс <b>{$indexName}</b> создан.<br>";
+    } catch (Exception $e) {
+        echo "ℹ️ Индекс уже существует.<br>";
+    }
 
-// ClickHouse
-$click = new ClickhouseExample();
-echo $click->query('SELECT count() FROM system.tables');
-$click->query("CREATE TABLE IF NOT EXISTS  users (
-   id UInt32,
-   name String,
-   age UInt8
-) ENGINE = MergeTree()
-ORDER BY id;");
-echo $click->query("INSERT INTO users (id, name, age) VALUES (1, 'Ivan', 25), (2, 'Maria', 30);");
-var_dump($click->query("SELECT * from users;"));
+    // 2. Добавление постов
+    echo "<h3>📝 2. Публикация постов</h3>";
+    $posts = [
+        ['id' => 1, 'author' => 'ivan', 'title' => 'Привет мир', 'content' => 'Это мой первый пост в соцсети.', 'tags' => ['start']],
+        ['id' => 2, 'author' => 'anna', 'title' => 'Прогулка', 'content' => 'Гуляла в парке, видела белку.', 'tags' => ['park', 'nature']],
+        ['id' => 3, 'author' => 'dev', 'title' => 'Elasticsearch', 'content' => 'Поиск работает быстро благодаря Elasticsearch.', 'tags' => ['tech']],
+    ];
+
+    foreach ($posts as $post) {
+        $elastic->indexDocument($indexName, $post['id'], $post);
+        echo "✅ Пост добавлен: <b>{$post['title']}</b><br>";
+    }
+
+    // 3. Поиск
+    echo "<h3>🔍 3. Поиск по постам</h3>";
+    $query = 'Elasticsearch';
+    echo "Поиск по слову: <b>$query</b><br>";
+
+    $result = json_decode($elastic->search($indexName, ['content' => $query]), true);
+
+    if (!empty($result['hits']['hits'])) {
+        echo "<ul>";
+        foreach ($result['hits']['hits'] as $hit) {
+            $doc = $hit['_source'];
+            echo "<li><b>{$doc['title']}</b> ({$doc['author']}): {$doc['content']}</li>";
+        }
+        echo "</ul>";
+    } else {
+        echo "Ничего не найдено.";
+    }
+
+} catch (Exception $e) {
+    echo "<p style='color:red; font-weight:bold;'>❌ ОШИБКА: " . $e->getMessage() . "</p>";
+    echo "<pre>" . $e->getTraceAsString() . "</pre>";
+}
+?>

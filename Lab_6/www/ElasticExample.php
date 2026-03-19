@@ -1,6 +1,5 @@
 <?php
 namespace App;
-
 use App\Helpers\ClientFactory;
 
 class ElasticExample
@@ -9,8 +8,16 @@ class ElasticExample
 
     public function __construct()
     {
-        // ВАЖНО: localhost заменен на elasticsearch (имя контейнера)
+        // Имя сервиса в docker-compose.yml
         $this->client = ClientFactory::make('http://elasticsearch:9200');
+    }
+
+    public function createIndex(string $index): void
+    {
+        try {
+            $this->client->put($index);
+        } catch (\Exception $e) {
+        }
     }
 
     public function indexDocument(string $index, int $id, array $data): string

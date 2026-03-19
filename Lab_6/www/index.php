@@ -28,3 +28,4 @@ $click->query("CREATE TABLE IF NOT EXISTS  users (
 ORDER BY id;");
 echo $click->query("INSERT INTO users (id, name, age) VALUES (1, 'Ivan', 25), (2, 'Maria', 30);");
 var_dump($click->query("SELECT * from users;"));
+.

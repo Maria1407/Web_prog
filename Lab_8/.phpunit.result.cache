@@ -1,0 +1,1 @@
+{"version":1,"defects":{"ApiTest::testCreateOrderViaApi":1},"times":{"ApiTest::testCreateOrderViaApi":2.035,"ApiTest::testMockHttpRequest":0.005,"ExampleTest::testTrueIsTrue":0,"TaxiOrderTest::testCreateOrderSuccess":0,"TaxiOrderTest::testCreateOrderInvalidPassengers":0,"TaxiOrderTest::testCreateOrderWithMockPDO":0.011,"TaxiOrderTest::testGetOrder":0}}

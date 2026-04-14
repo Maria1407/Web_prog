@@ -1,5 +1,6 @@
 ﻿/vendor
 .env.local
 .env.test
-composer.lock
+*.log
+*.tmp
 .DS_Store
